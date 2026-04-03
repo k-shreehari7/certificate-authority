@@ -1,0 +1,20 @@
+[ req ]
+distinguished_name = req_distinguished_name
+req_extensions = req_ext
+prompt = no
+
+[ req_distinguished_name ]
+C = US
+ST = California
+L = San Francisco
+O = ExampleOrg
+OU = Servers
+CN = {{ fqdn }}
+
+[ req_ext ]
+subjectAltName = @alt_names
+
+[ alt_names ]
+DNS.1 = {{ fqdn }}
+DNS.2 = {{ san1 }}
+IP.1 = {{ san2 }}

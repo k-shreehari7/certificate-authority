@@ -1,0 +1,50 @@
+[ ca ]
+default_ca = CA_default
+
+[ CA_default ]
+dir               = {{ intermediate_ca_path }}
+certs             = $dir/certs
+crl_dir           = $dir/crl
+database          = $dir/index.txt
+new_certs_dir     = $dir/newcerts
+serial            = $dir/serial
+private_key       = $dir/private/intermediate.key.pem
+certificate       = $dir/certs/intermediate.cert.pem
+default_days      = 1825
+default_md        = sha256
+policy            = policy_loose
+x509_extensions   = v3_intermediate_ca
+default_crl_days  = 30
+
+[ policy_loose ]
+countryName             = match
+stateOrProvinceName     = match
+organizationName        = match
+commonName              = supplied
+
+[ req ]
+distinguished_name = req_distinguished_name
+prompt = no
+
+[ req_distinguished_name ]
+C  = US
+ST = California
+L  = San Francisco
+O  = ExampleOrg
+OU = IntermediateCA
+CN = {{ interca_commonname }}
+
+[ v3_intermediate_ca ]
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer
+basicConstraints = critical, CA:TRUE, pathlen:0
+keyUsage = critical, digitalSignature, cRLSign, keyCertSign
+
+[ server_cert ]
+basicConstraints = CA:FALSE
+nsCertType = server
+nsComment = "OpenSSL Generated Server Certificate"
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer
+keyUsage = digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth

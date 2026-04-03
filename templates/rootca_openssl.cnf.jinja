@@ -1,0 +1,48 @@
+[ ca ]
+default_ca = CA_default
+
+[ CA_default ]
+dir               = {{ root_ca_path }}
+certs             = $dir/certs
+crl_dir           = $dir/crl
+database          = $dir/index.txt
+new_certs_dir     = $dir/newcerts
+serial            = $dir/serial
+private_key       = $dir/private/ca.key.pem
+certificate       = $dir/certs/ca.cert.pem
+default_days      = 3650
+default_md        = sha256
+policy            = policy_strict
+x509_extensions   = v3_ca
+unique_subject    = no
+
+[ policy_strict ]
+countryName             = match
+stateOrProvinceName     = match
+organizationName        = match
+commonName              = supplied
+
+[ req ]
+distinguished_name = req_distinguished_name
+x509_extensions = v3_ca
+prompt = no
+
+[ req_distinguished_name ]
+C  = US
+ST = California
+L  = San Francisco
+O  = ExampleOrg
+OU = RootCA
+CN = {{ rootca_commonname }}
+
+[ v3_ca ]
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always,issuer
+basicConstraints = critical, CA:TRUE, pathlen:1
+keyUsage = critical, digitalSignature, cRLSign, keyCertSign
+
+[v3_intermediate_ca]
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always,issuer
+basicConstraints = critical, CA:TRUE, pathlen:0
+keyUsage = critical, cRLSign, keyCertSign, digitalSignature
